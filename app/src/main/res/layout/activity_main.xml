@@ -27,7 +27,7 @@
             android:text="精选"
             android:button="@null"
             android:textColor="@color/main_botton_text_color"
-            android:checked="true"/>
+            android:checked="false"/>
         <RadioButton
             android:id="@+id/layout_category"
             android:drawableTop="@drawable/selector_menu_item_category"
@@ -35,7 +35,7 @@
             android:text="分类"
             android:button="@null"
             android:textColor="@color/main_botton_text_color"
-            android:checked="true"/>
+            android:checked="false"/>
         <RadioButton
             android:id="@+id/layout_cart"
             android:drawableTop="@drawable/selector_menu_item_cart"
@@ -43,7 +43,7 @@
             android:text="购物车"
             android:button="@null"
             android:textColor="@color/main_botton_text_color"
-            android:checked="true"/>
+            android:checked="false"/>
         <RadioButton
             android:id="@+id/layout_personal_center"
             android:drawableTop="@drawable/selector_menu_item_personal_center"
@@ -51,6 +51,19 @@
             android:text="我"
             android:button="@null"
             android:textColor="@color/main_botton_text_color"
-            android:checked="true"/>
+            android:checked="false"/>
     </RadioGroup>
+
+    <View
+        android:id="@+id/vline"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/main_bottom"
+        android:background="#D6DCDC" />
+    <RelativeLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="1dp"
+        android:layout_above="@id/vline"/>
 </RelativeLayout>

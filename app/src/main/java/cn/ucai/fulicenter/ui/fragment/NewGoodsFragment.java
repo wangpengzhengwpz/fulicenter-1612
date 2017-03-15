@@ -4,11 +4,13 @@ package cn.ucai.fulicenter.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.net.INewGoodsModel;
 import cn.ucai.fulicenter.model.net.NewGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.GoodsAdapter;
@@ -41,6 +44,12 @@ public class NewGoodsFragment extends Fragment {
     GridLayoutManager gm;
     GoodsAdapter adapter;
     List<NewGoodsBean> mList = new ArrayList<>();
+    @BindView(R.id.tv_refresh)
+    TextView tvRefresh;
+    @BindView(R.id.srl)
+    SwipeRefreshLayout srl;
+    @BindView(R.id.tv_nomore)
+    TextView tvNomore;
 
     @Nullable
     @Override
@@ -52,7 +61,21 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initView() {
+        srl.setColorSchemeColors(
+                getResources().getColor(R.color.google_green),
+                getResources().getColor(R.color.google_blue),
+                getResources().getColor(R.color.google_red),
+                getResources().getColor(R.color.google_yellow));
         gm = new GridLayoutManager(getContext(), I.COLUM_NUM);
+        gm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == mList.size()) {
+                    return I.COLUM_NUM;
+                }
+                return 1;
+            }
+        });
         rvGoods.setLayoutManager(gm);
         rvGoods.setHasFixedSize(true);
         adapter = new GoodsAdapter(getContext(), mList);
@@ -66,18 +89,31 @@ public class NewGoodsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         model = new NewGoodsModel();
         initView();
-        initData();
+        initData(I.ACTION_DOWNLOAD);
+        setListener();
     }
 
-    private void initData() {
+    private void setListener() {
+        setPullDownListener();
+        setPullUpListener();
+    }
+
+    private void initData(final int action) {
         model.loadData(getContext(), pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
+                setRefresh(false);
+                adapter.setMore(true);
                 L.e(TAG, "initData,result = " + result);
                 if (result != null && result.length > 0) {
                     ArrayList<NewGoodsBean> list = ResultUtils.array2List(result);
-                    mList.clear();
+                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
+                        mList.clear();
+                    }
                     mList.addAll(list);
+                    if (list.size() < I.PAGE_SIZE_DEFAULT) {
+                        adapter.setMore(false);
+                    }
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -85,6 +121,45 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onError(String error) {
                 L.e(TAG, "initData,error = " + error);
+                CommonUtils.showShortToast(error);
+                setRefresh(false);
+            }
+        });
+    }
+
+    private void setRefresh(boolean refresh) {
+        srl.setRefreshing(refresh);
+        tvRefresh.setVisibility(refresh ? View.VISIBLE : View.GONE);
+    }
+
+    private void setPullDownListener() {
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setRefresh(true);
+                pageId = 1;
+                initData(I.ACTION_PULL_DOWN);
+            }
+        });
+    }
+
+    private void setPullUpListener() {
+        rvGoods.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastPosition = gm.findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastPosition == adapter.getItemCount() - 1
+                        && adapter.isMore()) {
+                    pageId++;
+                    initData(I.ACTION_PULL_UP);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
