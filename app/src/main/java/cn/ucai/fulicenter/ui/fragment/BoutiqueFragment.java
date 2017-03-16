@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.model.net.BoutiqueModel;
 import cn.ucai.fulicenter.model.net.IBoutiqueModel;
@@ -67,6 +66,7 @@ public class BoutiqueFragment extends Fragment {
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow));
         gm = new LinearLayoutManager(getContext());
+
         rvGoods.setLayoutManager(gm);
         rvGoods.setHasFixedSize(true);
         adapter = new BoutiqueAdapter(getContext(), mList);
@@ -80,31 +80,23 @@ public class BoutiqueFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         model = new BoutiqueModel();
         initView();
-        initData(I.ACTION_DOWNLOAD);
+        initData();
         setListener();
     }
 
     private void setListener() {
         setPullDownListener();
-        setPullUpListener();
     }
 
-    private void initData(final int action) {
+    private void initData() {
         model.loadData(getContext(), new OnCompleteListener<BoutiqueBean[]>() {
             @Override
             public void onSuccess(BoutiqueBean[] result) {
                 setRefresh(false);
-                adapter.setMore(true);
                 L.e(TAG, "initData,result = " + result);
                 if (result != null && result.length > 0) {
                     ArrayList<BoutiqueBean> list = ResultUtils.array2List(result);
-                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
-                        mList.clear();
-                    }
                     mList.addAll(list);
-                    if (list.size() < I.PAGE_SIZE_DEFAULT) {
-                        adapter.setMore(false);
-                    }
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -128,29 +120,7 @@ public class BoutiqueFragment extends Fragment {
             @Override
             public void onRefresh() {
                 setRefresh(true);
-                pageId = 1;
-                initData(I.ACTION_PULL_DOWN);
-            }
-        });
-    }
-
-    private void setPullUpListener() {
-        rvGoods.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition = gm.findLastVisibleItemPosition();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastPosition == adapter.getItemCount() - 1
-                        && adapter.isMore()) {
-                    pageId++;
-                    initData(I.ACTION_PULL_UP);
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+                initData();
             }
         });
     }
