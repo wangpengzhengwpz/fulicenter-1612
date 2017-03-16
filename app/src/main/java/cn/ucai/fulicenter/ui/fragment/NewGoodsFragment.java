@@ -160,6 +160,8 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                int firstPosition = gm.findFirstVisibleItemPosition();
+                srl.setEnabled(firstPosition == 0);
             }
         });
     }
