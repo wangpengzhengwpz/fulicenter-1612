@@ -8,8 +8,8 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.ui.activity.BoutiqueChildActivity;
+import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
-import cn.ucai.fulicenter.ui.adapter.GoodsDetailsActivity;
 
 /**
  * Created by Administrator on 2017/3/16.
