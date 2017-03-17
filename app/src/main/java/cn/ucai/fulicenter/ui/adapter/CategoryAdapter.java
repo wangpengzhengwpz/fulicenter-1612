@@ -19,6 +19,7 @@ import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
+import cn.ucai.fulicenter.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/16.
@@ -82,11 +83,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         } else {
             vh = (CategoryGroupViewHolder) view.getTag();
         }
-        CategoryGroupBean group = getGroup(groupPosition);
-        L.e(TAG, "group=" + group);
-        vh.tvGroupName.setText(group.getName());
-        ImageLoader.downloadImg(mContext, vh.ivGroupThumb, group.getImageUrl());
-        vh.ivIndicator.setImageResource(isExpanded ? R.mipmap.expand_off : R.mipmap.expand_on);
+        vh.bind(groupPosition, isExpanded);
         return view;
     }
 
@@ -101,12 +98,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         } else {
             vh = (CategoryChildViewHolder) view.getTag();
         }
-        CategoryChildBean child = getChild(groupPosition, childPosition);
-        L.e(TAG, "child=" + child);
-        if (child != null) {
-            vh.tvGroupChildName.setText(child.getName());
-            ImageLoader.downloadImg(mContext, vh.ivCategoryChildThumb, child.getImageUrl());
-        }
+        vh.bind(groupPosition, childPosition);
         return view;
     }
 
@@ -136,6 +128,14 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         CategoryGroupViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
+        public void bind(int groupPosition, boolean isExpanded) {
+            CategoryGroupBean group = getGroup(groupPosition);
+            L.e(TAG, "group=" + group);
+            tvGroupName.setText(group.getName());
+            ImageLoader.downloadImg(mContext, ivGroupThumb, group.getImageUrl());
+            ivIndicator.setImageResource(isExpanded ? R.mipmap.expand_off : R.mipmap.expand_on);
+        }
     }
 
     class CategoryChildViewHolder {
@@ -148,6 +148,21 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
         CategoryChildViewHolder(View view) {
             ButterKnife.bind(this, view);
+        }
+
+        public void bind(int groupPosition, int childPosition) {
+            final CategoryChildBean child = getChild(groupPosition, childPosition);
+            L.e(TAG, "child=" + child);
+            if (child != null) {
+                tvGroupChildName.setText(child.getName());
+                ImageLoader.downloadImg(mContext, ivCategoryChildThumb, child.getImageUrl());
+                layoutCategoryChild.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MFGT.gotoCategoryChild(mContext, child.getId());
+                    }
+                });
+            }
         }
     }
 }

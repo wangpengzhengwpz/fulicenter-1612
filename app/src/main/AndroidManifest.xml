@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".ui.activity.BoutiqueChildActivity" />
         <activity android:name=".ui.activity.GoodsDetailsActivity" />
+        <activity android:name=".ui.activity.CategoryChildActivity" />
     </application>
 
 </manifest>
