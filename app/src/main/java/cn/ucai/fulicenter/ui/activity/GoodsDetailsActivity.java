@@ -22,7 +22,7 @@ import cn.ucai.fulicenter.view.MFGT;
 import cn.ucai.fulicenter.view.SlideAutoLoopView;
 
 /**
- * Created by Administrator on 2017/3/16.
+ * Created by Administrator on 2017/3/17.
  */
 public class GoodsDetailsActivity extends AppCompatActivity {
     IGoodsModel model;

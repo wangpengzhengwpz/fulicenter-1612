@@ -48,7 +48,8 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         if (viewType == I.TYPE_FOOTER) {
             vh = new FooterViewHolder(View.inflate(mContext, R.layout.item_footer , null));
         } else {
-            vh = new GoodsViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_goods, parent, false));
+            vh = new GoodsViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_goods,
+                    parent, false));
         }
         return vh;
     }
