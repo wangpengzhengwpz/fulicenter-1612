@@ -78,8 +78,9 @@ public class CategoryFragment extends Fragment {
                     for (int i = 0; i < list.size(); i++) {
                         childList.add(new ArrayList<CategoryChildBean>());
                         laodChildData(list.get(i).getId(), i);
-
                     }
+                } else {
+                    showDialog(false, false);
                 }
             }
 
@@ -132,7 +133,9 @@ public class CategoryFragment extends Fragment {
         loadView.setVisibility(dialog ? View.VISIBLE : View.GONE);
         if (dialog) {
             loadFail.setVisibility(View.GONE);
+            layoutTips.setVisibility(View.VISIBLE);
         } else {
+            layoutTips.setVisibility(success ? View.GONE : View.VISIBLE);
             loadFail.setVisibility(success ? View.GONE : View.VISIBLE);
         }
     }
