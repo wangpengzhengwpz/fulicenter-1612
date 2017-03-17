@@ -135,4 +135,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="LoadingProgressStyle" parent="@android:style/Widget.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/rp_loading_anim</item>
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:indeterminate">false</item>
+    </style>
 </resources>
