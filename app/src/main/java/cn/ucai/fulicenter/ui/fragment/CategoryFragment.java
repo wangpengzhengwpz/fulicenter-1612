@@ -21,8 +21,8 @@ import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.model.net.CategoryModel;
 import cn.ucai.fulicenter.model.net.ICategoryModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.L;
-import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
 
 /**
@@ -72,7 +72,7 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
                 if (result != null) {
-                    ArrayList<CategoryGroupBean> list = ResultUtils.array2List(result);
+                    ArrayList<CategoryGroupBean> list = ConvertUtils.array2List(result);
                     groupList.clear();
                     groupList.addAll(list);
                     for (int i = 0; i < list.size(); i++) {
@@ -98,7 +98,7 @@ public class CategoryFragment extends Fragment {
             public void onSuccess(CategoryChildBean[] result) {
                 loadIndex++;
                 if (result != null) {
-                    ArrayList<CategoryChildBean> list = ResultUtils.array2List(result);
+                    ArrayList<CategoryChildBean> list = ConvertUtils.array2List(result);
                     childList.set(index, list);
                 }
                 if (loadIndex == groupList.size()) {

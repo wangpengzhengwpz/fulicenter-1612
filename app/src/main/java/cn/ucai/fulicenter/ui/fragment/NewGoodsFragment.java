@@ -25,8 +25,8 @@ import cn.ucai.fulicenter.model.net.INewGoodsModel;
 import cn.ucai.fulicenter.model.net.NewGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
+import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.L;
-import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.GoodsAdapter;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
@@ -109,7 +109,7 @@ public class NewGoodsFragment extends Fragment {
                 adapter.setMore(true);
                 L.e(TAG, "initData,result = " + result);
                 if (result != null && result.length > 0) {
-                    ArrayList<NewGoodsBean> list = ResultUtils.array2List(result);
+                    ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                     if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
                         mList.clear();
                     }
@@ -179,5 +179,9 @@ public class NewGoodsFragment extends Fragment {
         if (bind != null) {
             bind.unbind();
         }
+    }
+
+    public void sortBy(int sortBy) {
+        adapter.setSortBy(sortBy);
     }
 }

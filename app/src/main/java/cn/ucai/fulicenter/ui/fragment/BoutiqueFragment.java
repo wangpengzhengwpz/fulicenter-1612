@@ -24,8 +24,8 @@ import cn.ucai.fulicenter.model.net.BoutiqueModel;
 import cn.ucai.fulicenter.model.net.IBoutiqueModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
+import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.L;
-import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.BoutiqueAdapter;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
@@ -95,7 +95,7 @@ public class BoutiqueFragment extends Fragment {
                 setRefresh(false);
                 L.e(TAG, "initData,result = " + result);
                 if (result != null && result.length > 0) {
-                    ArrayList<BoutiqueBean> list = ResultUtils.array2List(result);
+                    ArrayList<BoutiqueBean> list = ConvertUtils.array2List(result);
                     mList.addAll(list);
                     adapter.notifyDataSetChanged();
                 }
