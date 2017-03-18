@@ -13,6 +13,8 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.view.CatFilterCategoryButton;
+import cn.ucai.fulicenter.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/17.
@@ -26,6 +28,9 @@ public class CategoryChildActivity extends AppCompatActivity {
     Button btnSortPrice;
     @BindView(R.id.btn_sort_addtime)
     Button btnSortAddtime;
+    String groupName;
+    @BindView(R.id.cfcd_filter)
+    CatFilterCategoryButton cfcdFilter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +41,12 @@ public class CategoryChildActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, newGoodsFragment)
                 .commit();
+        groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
+        initView();
+    }
+
+    private void initView() {
+        cfcdFilter.setText(groupName);
     }
 
     @OnClick({R.id.btn_sort_price, R.id.btn_sort_addtime})
@@ -58,5 +69,10 @@ public class CategoryChildActivity extends AppCompatActivity {
                 break;
         }
         newGoodsFragment.sortBy(sortBy);
+    }
+
+    @OnClick(R.id.backClickArea)
+    public void backonClick() {
+        MFGT.finish(CategoryChildActivity.this);
     }
 }

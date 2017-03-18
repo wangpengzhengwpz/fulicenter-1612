@@ -150,7 +150,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             ButterKnife.bind(this, view);
         }
 
-        public void bind(int groupPosition, int childPosition) {
+        public void bind(final int groupPosition, int childPosition) {
             final CategoryChildBean child = getChild(groupPosition, childPosition);
             L.e(TAG, "child=" + child);
             if (child != null) {
@@ -159,7 +159,8 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
                 layoutCategoryChild.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        MFGT.gotoCategoryChild(mContext, child.getId());
+                        MFGT.gotoCategoryChild(mContext, child.getId(),
+                                getGroup(groupPosition).getName());
                     }
                 });
             }

@@ -47,8 +47,9 @@ public class MFGT {
                 .putExtra(I.Goods.KEY_GOODS_ID, goodsId));
     }
 
-    public static void gotoCategoryChild(Context mContext, int catId) {
-        startActivity((Activity)mContext, new Intent(mContext, CategoryChildActivity.class)
-                .putExtra(I.NewAndBoutiqueGoods.CAT_ID, catId));
+    public static void gotoCategoryChild(Context mContext, int catId, String groupName) {
+        startActivity((Activity) mContext, new Intent(mContext, CategoryChildActivity.class)
+                .putExtra(I.NewAndBoutiqueGoods.CAT_ID, catId)
+                .putExtra(I.CategoryGroup.NAME, groupName));
     }
 }
