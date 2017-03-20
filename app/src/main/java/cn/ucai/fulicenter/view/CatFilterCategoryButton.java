@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
@@ -29,7 +28,7 @@ public class CatFilterCategoryButton extends Button {
     PopupWindow popupWindow;
     GridView gv;
     CatFilterAdapter adapter;
-    List<CategoryChildBean> list = new ArrayList<>();
+    ArrayList<CategoryChildBean> list = new ArrayList<>();
 
     //butterknife实例化
     public CatFilterCategoryButton(Context context, AttributeSet attrs) {
@@ -62,6 +61,7 @@ public class CatFilterCategoryButton extends Button {
             popupWindow.setBackgroundDrawable(new ColorDrawable(0xbb000000));
             popupWindow.setContentView(gv);
         }
+
         popupWindow.showAsDropDown(this);
     }
 
@@ -72,7 +72,7 @@ public class CatFilterCategoryButton extends Button {
         isExpan = !isExpan;
     }
 
-    public void initView(String groupName, List<CategoryChildBean> l) {
+    public void initView(String groupName, ArrayList<CategoryChildBean> l) {
         if (groupName == null || l == null) {
             CommonUtils.showShortToast("小类数据获取异常");
             return;
@@ -85,7 +85,7 @@ public class CatFilterCategoryButton extends Button {
         gv.setVerticalSpacing(10);
         gv.setNumColumns(GridView.AUTO_FIT);
         //列表里面显示数据的adapter适配器
-        adapter = new CatFilterAdapter(mContext, list);
+        adapter = new CatFilterAdapter(mContext, list, groupName);
         gv.setAdapter(adapter);
     }
 }

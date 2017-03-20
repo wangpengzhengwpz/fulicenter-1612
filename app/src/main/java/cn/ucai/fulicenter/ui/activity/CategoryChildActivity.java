@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +34,7 @@ public class CategoryChildActivity extends AppCompatActivity {
     String groupName;
     @BindView(R.id.cfcd_filter)
     CatFilterCategoryButton cfcdFilter;
-    List<CategoryChildBean> mList;
+    ArrayList<CategoryChildBean> mList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class CategoryChildActivity extends AppCompatActivity {
                 .commit();
         //接受大类名称，当前大类的小类集合
         groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
-        mList = (List<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.DATA);
+        mList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.DATA);
         initView();
     }
 

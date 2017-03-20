@@ -8,13 +8,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
+import cn.ucai.fulicenter.ui.activity.CategoryChildActivity;
+import cn.ucai.fulicenter.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/20.
@@ -22,11 +24,13 @@ import cn.ucai.fulicenter.model.utils.ImageLoader;
 
 public class CatFilterAdapter extends BaseAdapter {
     Context mContext;
-    List<CategoryChildBean> mList;
+    ArrayList<CategoryChildBean> mList;
+    String groupName;
 
-    public CatFilterAdapter(Context context, List<CategoryChildBean> list) {
+    public CatFilterAdapter(Context context, ArrayList<CategoryChildBean> list, String name) {
         this.mContext = context;
         this.mList = list;
+        groupName = name;
     }
 
     @Override
@@ -71,9 +75,16 @@ public class CatFilterAdapter extends BaseAdapter {
         }
 
         public void bind(int position) {
-            CategoryChildBean bean = mList.get(position);
+            final CategoryChildBean bean = mList.get(position);
             tvCategoryChildName.setText(bean.getName());
             ImageLoader.downloadImg(mContext, ivCategoryChildThumb, bean.getImageUrl());
+            layoutCategoryChild.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MFGT.gotoCategoryChild(mContext, bean.getId(), groupName, mList);
+                    ((CategoryChildActivity)mContext).finish();
+                }
+            });
         }
     }
 }
