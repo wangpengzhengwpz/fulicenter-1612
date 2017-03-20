@@ -35,7 +35,7 @@ public class CategoryFragment extends Fragment {
     @BindView(R.id.elv_category)
     ExpandableListView elvCategory;
     List<CategoryGroupBean> groupList = new ArrayList<>();
-    List<List<CategoryChildBean>> childList = new ArrayList<>();
+    ArrayList<ArrayList<CategoryChildBean>> childList = new ArrayList<>();
     CategoryAdapter adapter;
     int loadIndex = 0;
     @BindView(R.id.layout_tips)
