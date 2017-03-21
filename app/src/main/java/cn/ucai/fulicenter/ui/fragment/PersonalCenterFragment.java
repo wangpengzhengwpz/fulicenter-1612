@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
@@ -51,8 +52,14 @@ public class PersonalCenterFragment extends Fragment {
         }
     }
 
+    @OnClick({R.id.tv_center_settings, R.id.center_user_info})
+    public void goSettings() {
+        MFGT.gotoSettings(getActivity());
+    }
+
     private void showUserInfo() {
         tvUserName.setText(user.getMuserNick());
         ImageLoader.downloadImg(getContext(), ivUserAvatar, user.getAvatar());
     }
+
 }

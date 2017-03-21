@@ -16,6 +16,7 @@ import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.ui.activity.LoginActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
 import cn.ucai.fulicenter.ui.activity.RegisterActivity;
+import cn.ucai.fulicenter.ui.activity.SettingsActivity;
 
 /**
  * Created by Administrator on 2017/3/16.
@@ -72,5 +73,9 @@ public class MFGT {
     private static void startActivityForResult(Activity activity, Intent intent, int requestCode) {
         activity.startActivityForResult(intent, requestCode);
         activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+    }
+
+    public static void gotoSettings(Activity activity) {
+        startActivity(activity, SettingsActivity.class);
     }
 }
