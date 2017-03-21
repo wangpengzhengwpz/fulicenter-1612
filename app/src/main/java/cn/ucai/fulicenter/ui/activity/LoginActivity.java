@@ -17,10 +17,12 @@ import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.Result;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.dao.UserDao;
 import cn.ucai.fulicenter.model.net.IUserModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
+import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.MD5;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.model.utils.SharePrefrenceUtils;
@@ -30,6 +32,7 @@ import cn.ucai.fulicenter.view.MFGT;
  * Created by Administrator on 2017/3/20.
  */
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = LoginActivity.class.getSimpleName();
     @BindView(R.id.tv_username)
     EditText tvUsername;
     @BindView(R.id.tv_password)
@@ -63,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showDialog() {
         pd = new ProgressDialog(LoginActivity.this);
-        pd.setMessage(getString(R.string.registering));
+        pd.setMessage(getString(R.string.logining));
         pd.show();
     }
 
@@ -102,9 +105,17 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void loginSuccess(User user) {
+    private void loginSuccess(final User user) {
+        L.e(TAG, "loginSuccess,user=" + user);
         FuLiCenterApplication.setCurrentUser(user);
         SharePrefrenceUtils.getInstance().setUserName(user.getMuserName());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean b = UserDao.getInstance(LoginActivity.this).saveUserInfo(user);
+                L.e(TAG, "loginSuccess,b=" + b);
+            }
+        }).start();
         MFGT.finish(LoginActivity.this);
     }
 
@@ -127,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
