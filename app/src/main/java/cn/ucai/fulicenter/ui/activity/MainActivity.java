@@ -2,6 +2,7 @@ package cn.ucai.fulicenter.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
@@ -17,6 +18,7 @@ import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.ui.fragment.PersonalCenterFragment;
 import cn.ucai.fulicenter.view.MFGT;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     NewGoodsFragment newGoodsFragment;
     BoutiqueFragment boutiqueFragment;
     CategoryFragment categoryFragment;
+    PersonalCenterFragment personalCenterFragment;
     RadioButton[] radioButtons;
 
     @Override
@@ -72,13 +75,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFragment() {
-        fragments = new Fragment[3];
+        fragments = new Fragment[5];
         newGoodsFragment = new NewGoodsFragment();
         boutiqueFragment = new BoutiqueFragment();
         categoryFragment = new CategoryFragment();
+        personalCenterFragment = new PersonalCenterFragment();
         fragments[0] = newGoodsFragment;
         fragments[1] = boutiqueFragment;
         fragments[2] = categoryFragment;
+        fragments[4] = personalCenterFragment;
     }
 
     public void onCheckedChange(View view) {
@@ -112,10 +117,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFragment() {
         if (currentIndex != index) {
-            getSupportFragmentManager().beginTransaction()
-                    .hide(fragments[currentIndex])
-                    .show(fragments[index])
-                    .commit();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.hide(fragments[currentIndex]);
+            if (!fragments[index].isAdded()) {
+                fragmentTransaction.add(R.id.fragment_container, fragments[index]);
+            }
+            fragmentTransaction.show(fragments[index]).commit();
             currentIndex = index;
         }
     }
