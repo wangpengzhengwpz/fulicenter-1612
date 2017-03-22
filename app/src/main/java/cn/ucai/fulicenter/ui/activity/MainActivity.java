@@ -131,6 +131,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         L.e(TAG, "index=" + index + ",currentIndex=" + currentIndex);
+        if (currentIndex == 4){
+            if (FuLiCenterApplication.getCurrentUser() == null) {
+                index = 0;
+            }
+            setFragment();
+        }
         setRadioButton();
     }
 
