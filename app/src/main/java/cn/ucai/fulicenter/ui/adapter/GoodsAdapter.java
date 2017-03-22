@@ -19,8 +19,8 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
-import cn.ucai.fulicenter.view.FooterViewHolder;
-import cn.ucai.fulicenter.view.MFGT;
+import cn.ucai.fulicenter.ui.view.FooterViewHolder;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/15.

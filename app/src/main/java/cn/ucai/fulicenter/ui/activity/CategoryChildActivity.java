@@ -16,8 +16,8 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
-import cn.ucai.fulicenter.view.CatFilterCategoryButton;
-import cn.ucai.fulicenter.view.MFGT;
+import cn.ucai.fulicenter.ui.view.CatFilterCategoryButton;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/17.

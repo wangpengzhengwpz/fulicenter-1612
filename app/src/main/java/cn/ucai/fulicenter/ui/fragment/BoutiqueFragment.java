@@ -27,7 +27,7 @@ import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.ui.adapter.BoutiqueAdapter;
-import cn.ucai.fulicenter.view.SpaceItemDecoration;
+import cn.ucai.fulicenter.ui.view.SpaceItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.

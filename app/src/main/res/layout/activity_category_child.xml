@@ -20,7 +20,7 @@
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/back"/>
         </LinearLayout>
-        <cn.ucai.fulicenter.view.CatFilterCategoryButton
+        <cn.ucai.fulicenter.ui.view.CatFilterCategoryButton
             android:id="@+id/cfcd_filter"
             android:layout_toRightOf="@id/backClickArea"
             android:layout_width="wrap_content"

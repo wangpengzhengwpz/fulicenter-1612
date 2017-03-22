@@ -44,6 +44,7 @@ import cn.ucai.fulicenter.R;
  *
  */
 public class OnSetAvatarListener implements View.OnClickListener {
+    private static final String TAG = "OnSetAvatarListener";
     private static final int REQUEST_TAKE_PICTURE=1;
     private static final int REQUEST_CHOOSE_PHOTO=2;
     public static final int REQUEST_CROP_PHOTO=3;
@@ -188,25 +189,32 @@ public class OnSetAvatarListener implements View.OnClickListener {
 
     /**
      * 保存头像至sd卡的Android文件夹，并显示头像
+     *
      * @param ivAvatar
      * @param data
      */
     private void saveCropAndShowAvatar(ImageView ivAvatar, Intent data) {
+        L.e(TAG, "data=" + data);
         Bundle extras = data.getExtras();
+        L.e(TAG, "extras=" + extras);
+        if (extras == null) {
+            return;
+        }
         Bitmap avatar = extras.getParcelable("data");
         if (avatar == null) {
             return;
         }
         ivAvatar.setImageBitmap(avatar);
-        File file = FileUtils.getAvatarPath(mActivity,mAvatarType, mUserName + ".jpg");
-        if(!file.getParentFile().exists()){
+        File file = FileUtils.getAvatarPath(mActivity, mAvatarType, mUserName + ".jpg");
+        L.e(TAG, "file=" + file.getAbsolutePath());
+        if (!file.getParentFile().exists()) {
             Toast.makeText(mActivity, "照片保存失败,保存的路径不存在", Toast.LENGTH_LONG).show();
-            return ;
+            return;
         }
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file);
-            avatar.compress(Bitmap.CompressFormat.JPEG,100,out);
+            avatar.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.i("main", "头像保存失败");
@@ -254,6 +262,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
         intent.putExtra("return-data", true);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.setData(uri);
         mActivity.startActivityForResult(intent,requestCode);
     }
 

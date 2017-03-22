@@ -17,9 +17,9 @@ import cn.ucai.fulicenter.model.net.GoodsModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.OkHttpUtils;
-import cn.ucai.fulicenter.view.FlowIndicator;
-import cn.ucai.fulicenter.view.MFGT;
-import cn.ucai.fulicenter.view.SlideAutoLoopView;
+import cn.ucai.fulicenter.ui.view.FlowIndicator;
+import cn.ucai.fulicenter.ui.view.MFGT;
+import cn.ucai.fulicenter.ui.view.SlideAutoLoopView;
 
 /**
  * Created by Administrator on 2017/3/17.

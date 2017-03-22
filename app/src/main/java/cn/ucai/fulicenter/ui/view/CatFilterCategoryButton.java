@@ -1,4 +1,4 @@
-package cn.ucai.fulicenter.view;
+package cn.ucai.fulicenter.ui.view;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
