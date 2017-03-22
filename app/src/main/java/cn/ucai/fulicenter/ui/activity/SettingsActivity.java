@@ -1,5 +1,7 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,18 +9,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.model.bean.Result;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.dao.UserDao;
+import cn.ucai.fulicenter.model.net.IUserModel;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.OnSetAvatarListener;
+import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
@@ -37,6 +46,10 @@ public class SettingsActivity extends AppCompatActivity {
     OnSetAvatarListener onSetAvatarListener;
     String avatarName;
     User user;
+    Bundle bundle;
+    ProgressDialog pd;
+    IUserModel model;
+    Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         initData();
+        bundle = savedInstanceState;
     }
 
     private void initData() {
@@ -65,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void showUserInfo(User user) {
         tvUserProfileName.setText(user.getMuserName());
         tvUserProfileNick.setText(user.getMuserNick());
-        ImageLoader.downloadImg(SettingsActivity.this, ivUserProfileAvatar, user.getAvatar());
+        ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), SettingsActivity.this, ivUserProfileAvatar);
     }
 
     @OnClick(R.id.backClickArea)
@@ -114,7 +128,61 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadAvatar() {
+    private void showDialog() {
+        pd = new ProgressDialog(SettingsActivity.this);
+        pd.setMessage(getString(R.string.update_user_avatar));
+        pd.show();
+    }
 
+    private void updateSuccess(final User u) {
+        L.e(TAG, "updateSuccess,user=" + user);
+        CommonUtils.showShortToast(R.string.update_user_avatar_success);
+        FuLiCenterApplication.setCurrentUser(u);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean b = UserDao.getInstance(SettingsActivity.this).saveUserInfo(u);
+                L.e(TAG, "updateSuccess,b=" + b);
+            }
+        }).start();
+        initData();
+    }
+
+    private void uploadAvatar() {
+        File file = new File(OnSetAvatarListener.getAvatarPath(SettingsActivity.this, I.AVATAR_TYPE
+                + "/" + user.getMuserName() + I.AVATAR_SUFFIX_JPG));
+        L.e("file="+file.exists());
+        L.e("file="+file.getAbsolutePath());
+        showDialog();
+        model = new UserModel();
+        model.uploadAvatar(SettingsActivity.this, user.getMuserName(), file,
+                new OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Result result = ResultUtils.getResultFromJson(s, User.class);
+                        if (result != null) {
+                            if (result.isRetMsg()) {
+                                User u = (User) result.getRetData();
+                                updateSuccess(u);
+                            } else {
+                                if (result.isRetMsg()) {
+                                    User u = (User) result.getRetData();
+                                    updateSuccess(u);
+                                } else {
+                                    if (result.getRetCode() == I.MSG_UPLOAD_AVATAR_FAIL) {
+                                        CommonUtils.showShortToast(R.string.update_user_avatar_fail);
+                                    }
+                                }
+                            }
+                        }
+                        pd.dismiss();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        pd.dismiss();
+                        CommonUtils.showShortToast(R.string.update_user_avatar_fail);
+                    }
+                });
     }
 }
