@@ -12,5 +12,7 @@ public interface IUserModel {
     void login(Context context, String username, String password,
                OkHttpUtils.OnCompleteListener<String> listener);
     void register(Context context, String username, String nickname, String password,
-               OkHttpUtils.OnCompleteListener<String> listener);
+                  OkHttpUtils.OnCompleteListener<String> listener);
+    void updateNick(Context context, String username, String newnick,
+                    OnCompleteListener<String> listener);
 }

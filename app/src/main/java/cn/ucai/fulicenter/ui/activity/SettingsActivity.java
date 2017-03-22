@@ -48,6 +48,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void showUserInfo(User user) {
         tvUserProfileName.setText(user.getMuserName());
         tvUserProfileNick.setText(user.getMuserNick());
@@ -64,5 +70,10 @@ public class SettingsActivity extends AppCompatActivity {
         UserDao.getInstance(SettingsActivity.this).logout();
         finish();
         MFGT.gotoLogin(SettingsActivity.this, I.REQUEST_CODE_LOGIN);
+    }
+
+    @OnClick(R.id.layout_user_profile_nickname)
+    public void updateNick() {
+        MFGT.gotoUpdateNick(SettingsActivity.this);
     }
 }

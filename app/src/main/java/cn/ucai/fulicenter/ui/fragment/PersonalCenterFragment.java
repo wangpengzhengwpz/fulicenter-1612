@@ -69,5 +69,4 @@ public class PersonalCenterFragment extends Fragment {
         tvUserName.setText(user.getMuserNick());
         ImageLoader.downloadImg(getContext(), ivUserAvatar, user.getAvatar());
     }
-
 }

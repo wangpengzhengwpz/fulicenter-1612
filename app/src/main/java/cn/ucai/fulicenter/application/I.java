@@ -327,9 +327,9 @@ public interface I {
     int MSG_USER_SAME_NICK=404;//昵称未修改
     int MSG_USER_UPDATE_NICK_SUCCESS=405;//昵称修改成功
     int MSG_USER_UPDATE_NICK_FAIL=406;//昵称修改失败
-    int MSG_USER_SAME_PASSWORD=407;//昵称未修改
-    int MSG_USER_UPDATE_PASSWORD_SUCCESS=408;//昵称修改成功
-    int MSG_USER_UPDATE_PASSWORD_FAIL=409;//昵称修改失败
+    int MSG_USER_SAME_PASSWORD=407;//密码未修改
+    int MSG_USER_UPDATE_PASSWORD_SUCCESS=408;//密码修改成功
+    int MSG_USER_UPDATE_PASSWORD_FAIL=409;//密码修改失败
     int MSG_LOCATION_UPLOAD_SUCCESS=501;//用户上传地理位置成功
     int MSG_LOCATION_UPLOAD_FAIL=502;//用户上传地理位置失败
     int MSG_LOCATION_UPDATE_SUCCESS=503;//用户更新地理位置成功
