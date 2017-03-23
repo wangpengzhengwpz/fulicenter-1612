@@ -71,14 +71,18 @@ public class PersonalCenterFragment extends Fragment {
         model.loadCollectsCount(getContext(), user.getMuserName(),
                 new OnCompleteListener<MessageBean>() {
                     @Override
-                    public void onSuccess(MessageBean result) {
-
+                    public void onSuccess(MessageBean msg) {
+                        if (msg != null && msg.isSuccess()) {
+                            tvCollectCount.setText(msg.getMsg());
+                        } else {
+                            tvCollectCount.setText("0");
+                        }
                     }
 
                     @Override
                     public void onError(String error) {
-
-                    }
+                        tvCollectCount.setText("0");
+                     }
                 });
     }
 
