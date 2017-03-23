@@ -86,8 +86,7 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void onError(String error) {
-                loadView.setVisibility(View.GONE);
-                loadFail.setVisibility(View.VISIBLE);
+                showDialog(false, false);
             }
         });
     }

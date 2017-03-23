@@ -14,9 +14,14 @@ import cn.ucai.fulicenter.model.utils.OkHttpUtils;
 public class  NewGoodsModel implements INewGoodsModel {
 
     @Override
-    public void loadData(Context context, int catId, int pageId, OnCompleteListener<NewGoodsBean[]> listener) {
+    public void loadData(Context context, int catId, int pageId,
+                         OnCompleteListener<NewGoodsBean[]> listener) {
+        String url = I.REQUEST_FIND_NEW_BOUTIQUE_GOODS;
+        if (catId > 0) {
+            url = I.REQUEST_FIND_GOODS_DETAILS;
+        }
         OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
-        utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
+        utils.setRequestUrl(url)
                 .addParam(I.NewAndBoutiqueGoods.CAT_ID, String.valueOf(catId))
                 .addParam(I.PAGE_ID, String.valueOf(pageId))
                 .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
