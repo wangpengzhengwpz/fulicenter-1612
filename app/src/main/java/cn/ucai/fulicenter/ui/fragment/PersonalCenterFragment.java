@@ -15,7 +15,11 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.net.IUserModel;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
@@ -32,6 +36,7 @@ public class PersonalCenterFragment extends Fragment {
     TextView tvCollectCount;
     Unbinder unbinder;
     User user;
+    IUserModel model;
 
     @Nullable
     @Override
@@ -44,6 +49,7 @@ public class PersonalCenterFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        model = new UserModel();
         initData();
     }
 
@@ -57,16 +63,32 @@ public class PersonalCenterFragment extends Fragment {
         user = FuLiCenterApplication.getCurrentUser();
         if (user != null) {
             showUserInfo();
+            loadCollectsCount();
         }
+    }
+
+    private void loadCollectsCount() {
+        model.loadCollectsCount(getContext(), user.getMuserName(),
+                new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+    }
+
+    private void showUserInfo() {
+        tvUserName.setText(user.getMuserNick());
+        ImageLoader.setAvatar(user.getAvatar(), getContext(), ivUserAvatar);
     }
 
     @OnClick({R.id.tv_center_settings, R.id.center_user_info})
     public void goSettings() {
         MFGT.gotoSettings(getActivity());
-    }
-
-    private void showUserInfo() {
-        tvUserName.setText(user.getMuserNick());
-        ImageLoader.downloadImg(getContext(), ivUserAvatar, user.getAvatar());
     }
 }
