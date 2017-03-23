@@ -4,17 +4,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.AlbumsBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
+import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.GoodsModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.OkHttpUtils;
 import cn.ucai.fulicenter.ui.view.FlowIndicator;
@@ -42,6 +47,8 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     @BindView(R.id.wv_good_brief)
     WebView wvGoodBrief;
     GoodsDetailsBean bean;
+    @BindView(R.id.iv_good_collect)
+    ImageView ivGoodCollect;
 
     @Override
     protected void onCreate(@Nullable Bundle saveInstanceState) {
@@ -54,25 +61,60 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             return;
         }
         model = new GoodsModel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initData();
     }
 
     private void initData() {
-        model.loadData(GoodsDetailsActivity.this, goodsId, new OkHttpUtils
-                .OnCompleteListener<GoodsDetailsBean>() {
-            @Override
-            public void onSuccess(GoodsDetailsBean result) {
-                if (result != null) {
-                    bean = result;
-                    showDetails();
+        if (bean == null) {
+            model.loadData(GoodsDetailsActivity.this, goodsId, new OkHttpUtils
+                    .OnCompleteListener<GoodsDetailsBean>() {
+                @Override
+                public void onSuccess(GoodsDetailsBean result) {
+                    if (result != null) {
+                        bean = result;
+                        showDetails();
+                    }
                 }
-            }
 
-            @Override
-            public void onError(String error) {
-                CommonUtils.showShortToast(error);
-            }
-        });
+                @Override
+                public void onError(String error) {
+                    CommonUtils.showShortToast(error);
+                }
+            });
+        }
+        loadCollectStatus();
+    }
+
+    private void loadCollectStatus() {
+        User user = FuLiCenterApplication.getCurrentUser();
+        if (user != null) {
+            model.loadCollectStatus(GoodsDetailsActivity.this, goodsId, user.getMuserName(),
+                    new OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean msg) {
+                            if (msg != null && msg.isSuccess()) {
+                                setCollectStatus(true);
+                            } else {
+                                setCollectStatus(false);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            setCollectStatus(false);
+                        }
+                    });
+        }
+    }
+
+    private void setCollectStatus(boolean isCollects) {
+        ivGoodCollect.setImageResource(isCollects ?
+                R.mipmap.bg_collect_out : R.mipmap.bg_collect_in);
     }
 
     private void showDetails() {

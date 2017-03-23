@@ -3,6 +3,7 @@ package cn.ucai.fulicenter.model.net;
 import android.content.Context;
 
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.utils.OkHttpUtils;
 
 /**
@@ -10,5 +11,8 @@ import cn.ucai.fulicenter.model.utils.OkHttpUtils;
  */
 
 public interface IGoodsModel {
-    void loadData(Context context, int goodsId, OkHttpUtils.OnCompleteListener<GoodsDetailsBean> listener);
+    void loadData(Context context, int goodsId,
+                  OkHttpUtils.OnCompleteListener<GoodsDetailsBean> listener);
+    void loadCollectStatus(Context context, int goodsId, String username,
+                           OnCompleteListener<MessageBean> listener);
 }
