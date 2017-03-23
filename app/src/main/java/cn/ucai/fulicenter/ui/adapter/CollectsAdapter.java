@@ -2,16 +2,18 @@ package cn.ucai.fulicenter.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CollectBean;
@@ -42,18 +44,18 @@ public class CollectsAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh = null;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ViewHolder vh = null;
         if (viewType == I.TYPE_FOOTER) {
-            vh = new FooterViewHolder(View.inflate(mContext, R.layout.item_footer , null));
+            vh = new FooterViewHolder(View.inflate(mContext, R.layout.item_footer, null));
         } else {
-            vh = new GoodsViewHolder(View.inflate(mContext, R.layout.item_colects , null));
+            vh = new GoodsViewHolder(View.inflate(mContext, R.layout.item_colects, null));
         }
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         if (getItemViewType(position) == I.TYPE_FOOTER) {
             FooterViewHolder vh = (FooterViewHolder) holder;
             vh.setFooter(getFooterString());
@@ -79,15 +81,25 @@ public class CollectsAdapter extends RecyclerView.Adapter {
         return I.TYPE_ITEM;
     }
 
-    class GoodsViewHolder extends RecyclerView.ViewHolder {
+    @OnClick({R.id.iv_collect_del, R.id.layout_goods})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_collect_del:
+                break;
+            case R.id.layout_goods:
+                break;
+        }
+    }
+
+    class GoodsViewHolder extends ViewHolder {
         @BindView(R.id.ivGoodsThumb)
         ImageView ivGoodsThumb;
         @BindView(R.id.tvGoodsName)
         TextView tvGoodsName;
         @BindView(R.id.iv_collect_del)
-        TextView ivcollectdel;
+        ImageView ivCollectDel;
         @BindView(R.id.layout_goods)
-        LinearLayout layoutGoods;
+        RelativeLayout layoutGoods;
 
         GoodsViewHolder(View view) {
             super(view);
