@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.File;
 
+import cn.ucai.fulicenter.model.bean.CollectBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.utils.OkHttpUtils;
 
@@ -22,4 +23,6 @@ public interface IUserModel {
                       OnCompleteListener<String> listener);
     void loadCollectsCount(Context context, String username,
                            OnCompleteListener<MessageBean> listener);
+    void loadCollects(Context context, String username, int pageId, int pageSize,
+                      OnCompleteListener<CollectBean[]> listener);
 }
