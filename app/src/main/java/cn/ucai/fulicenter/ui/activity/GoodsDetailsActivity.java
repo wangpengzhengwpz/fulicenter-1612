@@ -108,15 +108,20 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(MessageBean msg) {
                         if (msg != null && msg.isSuccess()) {
-                            isCollects = true;
-                            if (action == I.ACTION_DELETE_COLLECT) {
-                                isCollects = false;
+//                            isCollects = true;
+//                            if (action == I.ACTION_DELETE_COLLECT) {
+//                                isCollects = false;
+//                            }
+                            isCollects = action == I.ACTION_DELETE_COLLECT ? false : true;
+                            if (action!=I.ACTION_IS_COLLECT) {
+                                CommonUtils.showShortToast(msg.getMsg());
                             }
                         } else {
-                            isCollects = false;
-                            if (action == I.ACTION_ADD_COLLECT) {
-                                isCollects = true;
-                            }
+//                            isCollects = false;
+//                            if (action == I.ACTION_ADD_COLLECT) {
+//                                isCollects = true;
+//                            }
+                            isCollects = action == I.ACTION_DELETE_COLLECT ? true : false;
                         }
                         setCollectStatus();
                     }
