@@ -47,6 +47,8 @@ public interface I {
     String ACTION_TYPE_PERSONAL = "personal";
     String ACTION_TYPE_CART = "cart";
 
+    /** 是否收藏*/
+    int ACTION_IS_COLLECT=0;
     /** 添加收藏*/
     int ACTION_ADD_COLLECT=1;
     /** 取消收藏*/
