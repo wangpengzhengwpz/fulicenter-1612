@@ -22,6 +22,7 @@ public interface I {
     int REQUEST_CODE_LOGIN = 102;
     int REQUEST_CODE_NICK = 103;
     int REQUEST_CODE_LOGIN_FROM_CART = 104;
+    int REQUEST_CODE_COLLECT = 105;
 
     /** BeeColud APP ID */
     String BEE_COLUD_APP_ID = "3539b590-4859-4128-87a3-5fb8b86b94f6";
@@ -106,6 +107,7 @@ public interface I {
         String KEY_SHOP_PRICE = "shop_price";
         String KEY_PROPERTIES = "properties";
         String KEY_ALBUMS = "albums";
+        String KEY_IS_COLLECTED = "goods_is_collected";
     }
 
     interface Category extends Goods {

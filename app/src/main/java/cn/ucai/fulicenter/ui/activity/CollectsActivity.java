@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -174,5 +175,21 @@ public class CollectsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         bind.unbind();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        L.e(TAG, "onActivityResult,requestCode" + requestCode + ",resultCode" + resultCode +
+                ",data" + data);
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_COLLECT) {
+            boolean isCollected = data.getBooleanExtra(I.GoodsDetails.KEY_IS_COLLECTED, true);
+            int goodsId = data.getIntExtra(I.GoodsDetails.KEY_GOODS_ID, 0);
+            L.e(TAG, "onActivityResult,isCollected=" + isCollected + ",goodsId=" + goodsId);
+            if (!isCollected) {
+                mList.remove(new CollectBean(goodsId));
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 }
