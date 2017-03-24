@@ -18,7 +18,9 @@ import cn.ucai.fulicenter.model.bean.AlbumsBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.GoodsModel;
+import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.AntiShake;
@@ -35,6 +37,7 @@ import cn.ucai.fulicenter.ui.view.SlideAutoLoopView;
 public class GoodsDetailsActivity extends AppCompatActivity {
     private static final String TAG = GoodsDetailsActivity.class.getSimpleName();
     IGoodsModel model;
+    ICartModel cartModel;
     int goodsId = 0;
     @BindView(R.id.tv_good_name_english)
     TextView tvGoodNameEnglish;
@@ -67,6 +70,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             return;
         }
         model = new GoodsModel();
+        cartModel = new CartModel();
     }
 
     @Override
@@ -209,5 +213,37 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         setResult(RESULT_OK, new Intent()
                 .putExtra(I.GoodsDetails.KEY_IS_COLLECTED, isCollects)
                 .putExtra(I.GoodsDetails.KEY_GOODS_ID, goodsId));
+    }
+
+    @OnClick(R.id.iv_good_cart)
+    public void addCart() {
+        if (util.check())return;
+        User user = FuLiCenterApplication.getCurrentUser();
+        if (user == null) {
+            MFGT.gotoLogin(GoodsDetailsActivity.this, 0);
+        } else {
+            addGoodsToCart(user);
+        }
+    }
+
+    private void addGoodsToCart(User user) {
+        cartModel.cartAction(GoodsDetailsActivity.this, I.ACTION_CART_ADD, null,
+                String.valueOf(goodsId), user.getMuserName(), 1,
+                new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            CommonUtils.showShortToast(R.string.add_goods_success);
+                        } else {
+                            CommonUtils.showShortToast(R.string.add_goods_fail);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        CommonUtils.showShortToast(R.string.add_goods_fail);
+                        L.e(TAG, "addGoodsToCart,error=" + error);
+                    }
+                });
     }
 }
