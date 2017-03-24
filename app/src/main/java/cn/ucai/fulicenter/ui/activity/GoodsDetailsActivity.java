@@ -198,12 +198,6 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        L.e(TAG, "onPause,isCollects=" + isCollects);
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         backClick();
