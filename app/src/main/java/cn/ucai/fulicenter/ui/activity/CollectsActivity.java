@@ -107,6 +107,9 @@ public class CollectsActivity extends AppCompatActivity {
                                 adapter.setMore(false);
                             }
                             adapter.notifyDataSetChanged();
+                        } else if (pageId == 1 && result != null && result.length == 0) {
+                            mList.clear();
+                            adapter.notifyDataSetChanged();
                         }
                     }
 
