@@ -80,17 +80,17 @@ public class CartFragment extends Fragment {
         setPullDownListener();
         adapter.setListener(mOnCheckedChangeListener);
         adapter.setUpdateListener(updateListener);
-//        adapter.setDelListener(delListener);
+        adapter.setDelListener(delListener);
     }
 
-//    View.OnClickListener delListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            int position = (int) v.getTag();
-//            L.e(TAG, "delListener,position=" + position);
-//            updateCart(position, -1);
-//        }
-//    };
+    View.OnClickListener delListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = (int) v.getTag();
+            L.e(TAG, "delListener,position=" + position);
+            updateCart(position, -1);
+        }
+    };
 
     View.OnClickListener updateListener = new View.OnClickListener() {
         @Override
