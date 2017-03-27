@@ -103,9 +103,13 @@ public class CartFragment extends Fragment {
 
     private void updateCart(final int position, final int count) {
         CartBean bean = cartList.get(position);
-        if (bean != null) {
-            model.cartAction(getContext(), I.ACTION_CART_UPDATA, String.valueOf(bean.getId()),
-                    null, null, bean.getCount() + count, new OnCompleteListener<MessageBean>() {
+        GoodsDetailsBean goods = bean.getGoods();
+        int action = bean.getCount() + count == 0 ? I.ACTION_CART_DEL : I.ACTION_CART_UPDATA;
+        if (bean != null && goods != null) {
+            model.cartAction(getContext(), action, String.valueOf(bean.getId()),
+                    String.valueOf(goods.getGoodsId()),
+                    FuLiCenterApplication.getCurrentUser().getMuserName(),
+                    bean.getCount() + count, new OnCompleteListener<MessageBean>() {
                         @Override
                         public void onSuccess(MessageBean result) {
                             if (result != null && result.isSuccess()) {
@@ -122,7 +126,11 @@ public class CartFragment extends Fragment {
     }
 
     private void updateCartListener(int position, int count) {
-        cartList.get(position).setCount(cartList.get(position).getCount() + count);
+        if (cartList.get(position).getCount() + count == 0) {
+            cartList.remove(position);
+        } else {
+            cartList.get(position).setCount(cartList.get(position).getCount() + count);
+        }
         adapter.notifyDataSetChanged();
         setPriceText();
     }

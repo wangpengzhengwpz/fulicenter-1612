@@ -48,14 +48,14 @@ public class CartAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh = new CartViewHolder(View.inflate(mContext,
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ViewHolder vh = new CartViewHolder(View.inflate(mContext,
                 R.layout.item_cart, null));
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         CartViewHolder vh = (CartViewHolder) holder;
         final CartBean bean = mList.get(position);
         vh.bind(position);
