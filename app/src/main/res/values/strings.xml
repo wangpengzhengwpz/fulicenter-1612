@@ -44,7 +44,8 @@
     <string name="add_goods_fail">add goods fail</string>
     <string name="order_nothing">order is noting</string>
     <string name="confirm_order">confirm order</string>
-
+    <item name="action_add_cart" type="id" />
+    <item name="action_del_cart" type="id" />
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
