@@ -226,6 +226,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     public void onSuccess(MessageBean result) {
                         if (result != null && result.isSuccess()) {
                             CommonUtils.showShortToast(R.string.add_goods_success);
+                            sendBroadcast(new Intent(I.BROADCAST_UPDATA_CART));
                         } else {
                             CommonUtils.showShortToast(R.string.add_goods_fail);
                         }

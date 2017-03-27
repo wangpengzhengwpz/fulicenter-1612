@@ -1,5 +1,9 @@
 package cn.ucai.fulicenter.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -58,6 +62,7 @@ public class CartFragment extends Fragment {
     CartAdapter adapter;
     @BindView(R.id.layout_cart)
     RelativeLayout mLayoutCart;
+    UpdateReceiver updateReceiver;
 
     @Nullable
     @Override
@@ -80,6 +85,9 @@ public class CartFragment extends Fragment {
         setPullDownListener();
         adapter.setListener(mOnCheckedChangeListener);
         adapter.setUpdateListener(updateListener);
+        updateReceiver = new UpdateReceiver();
+        IntentFilter filter = new IntentFilter(I.BROADCAST_UPDATA_CART);
+        getContext().registerReceiver(updateReceiver, filter);
     }
 
     View.OnClickListener updateListener = new View.OnClickListener() {
@@ -238,5 +246,20 @@ public class CartFragment extends Fragment {
     private int getPrice(String p){
         String pStr = p.substring(p.indexOf("￥")+1);
         return Integer.valueOf(pStr);
+    }
+
+    private class UpdateReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initData();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (updateReceiver != null) {
+            getContext().unregisterReceiver(updateReceiver);
+        }
     }
 }
