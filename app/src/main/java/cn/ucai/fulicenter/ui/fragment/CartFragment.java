@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,10 +21,12 @@ import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.model.bean.CartBean;
+import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.CartAdapter;
 import cn.ucai.fulicenter.ui.view.SpaceItemDecoration;
@@ -36,23 +39,23 @@ public class CartFragment extends Fragment {
     private static final String TAG = "CartFragment";
     ICartModel model;
     @BindView(R.id.tv_cart_sum_price)
-    TextView tvCartSumPrice;
+    TextView mTvCartSumPrice;
     @BindView(R.id.tv_cart_save_price)
-    TextView tvCartSavePrice;
+    TextView mTvCartSavePrice;
     @BindView(R.id.tv_refresh)
-    TextView tvRefresh;
+    TextView mTvRefresh;
     @BindView(R.id.nothing)
-    TextView nothing;
+    TextView mTvNothing;
     @BindView(R.id.rv)
-    RecyclerView rv;
+    RecyclerView mRv;
     @BindView(R.id.srl)
-    SwipeRefreshLayout srl;
+    SwipeRefreshLayout mSrl;
     User user;
     ArrayList<CartBean> cartList = new ArrayList<>();
     LinearLayoutManager gm;
     CartAdapter adapter;
     @BindView(R.id.layout_cart)
-    RelativeLayout layoutCart;
+    RelativeLayout mLayoutCart;
 
     @Nullable
     @Override
@@ -73,10 +76,32 @@ public class CartFragment extends Fragment {
 
     private void setListener() {
         setPullDownListener();
+        adapter.setListener(mOnCheckedChangeListener);
+    }
+
+    CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new
+            CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+            int position = (int) compoundButton.getTag();
+            L.e(TAG,"onCheckedChanged....checked="+checked+",position="+position);
+            cartList.get(position).setChecked(checked);
+            setPriceText();
+        }
+    };
+
+    private void setRefresh(boolean refresh) {
+        mSrl.setRefreshing(refresh);
+        mTvRefresh.setVisibility(refresh ? View.VISIBLE : View.GONE);
+    }
+
+    private void setCartListLayout(boolean isShow) {
+        mTvNothing.setVisibility(isShow ? View.GONE : View.VISIBLE);
+        mLayoutCart.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     private void setPullDownListener() {
-        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 setRefresh(true);
@@ -85,29 +110,20 @@ public class CartFragment extends Fragment {
         });
     }
 
-    private void setCartListLayout(boolean isShow) {
-        nothing.setVisibility(isShow ? View.GONE : View.VISIBLE);
-        layoutCart.setVisibility(isShow ? View.VISIBLE : View.GONE);
-    }
-
-    private void setRefresh(boolean refresh) {
-        srl.setRefreshing(refresh);
-        tvRefresh.setVisibility(refresh ? View.VISIBLE : View.GONE);
-    }
-
     private void initView() {
-        srl.setColorSchemeColors(
-                getResources().getColor(R.color.google_green),
+        mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
+                getResources().getColor(R.color.google_green),
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow));
         gm = new LinearLayoutManager(getContext());
-        rv.setLayoutManager(gm);
-        rv.setHasFixedSize(true);
+        mRv.setLayoutManager(gm);
+        mRv.setHasFixedSize(true);
         adapter = new CartAdapter(getContext(), cartList);
-        rv.setAdapter(adapter);
-        rv.addItemDecoration(new SpaceItemDecoration(12));
+        mRv.setAdapter(adapter);
+        mRv.addItemDecoration(new SpaceItemDecoration(12));
         setCartListLayout(false);
+        setPriceText();
     }
 
     private void initData() {
@@ -118,33 +134,50 @@ public class CartFragment extends Fragment {
     }
 
     private void showCartList() {
-        model.loadData(getContext(), user.getMuserName(), new OnCompleteListener<CartBean[]>() {
-            @Override
-            public void onSuccess(CartBean[] result) {
-                setRefresh(false);
-                setCartListLayout(true);
-                if (result != null) {
-                    cartList.clear();
-                    if (result.length > 0) {
-                        ArrayList<CartBean> list = ResultUtils.array2List(result);
-                        cartList.addAll(list);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        setCartListLayout(false);
+        model.loadData(getContext(), user.getMuserName(),
+                new OnCompleteListener<CartBean[]>() {
+                    @Override
+                    public void onSuccess(CartBean[] result) {
+                        setRefresh(false);
+                        setCartListLayout(true);
+                        if (result != null) {
+                            cartList.clear();
+                            if (result.length > 0) {
+                                ArrayList<CartBean> list = ResultUtils.array2List(result);
+                                cartList.addAll(list);
+                                adapter.notifyDataSetChanged();
+                            }else{
+                                setCartListLayout(false);
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onError(String error) {
-                setRefresh(false);
-                Log.e(TAG, "onError,error=" + error);
-            }
-        });
+                    @Override
+                    public void onError(String error) {
+                        setRefresh(false);
+                        Log.e(TAG, "onError,error=" + error);
+                    }
+                });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    private void setPriceText(){
+        int sumPrice = 0;
+        int rankPrice = 0;
+        for (CartBean cart:cartList){
+            if (cart.isChecked()){
+                GoodsDetailsBean goods = cart.getGoods();
+                if (goods!=null){
+                    sumPrice += getPrice(goods.getCurrencyPrice())*cart.getCount();
+                    rankPrice += getPrice(goods.getRankPrice())*cart.getCount();
+                }
+            }
+        }
+        mTvCartSumPrice.setText("合计：￥"+sumPrice);
+        mTvCartSavePrice.setText("节省：￥"+(sumPrice-rankPrice));
+    }
+
+    private int getPrice(String p){
+        String pStr = p.substring(p.indexOf("￥")+1);
+        return Integer.valueOf(pStr);
     }
 }
