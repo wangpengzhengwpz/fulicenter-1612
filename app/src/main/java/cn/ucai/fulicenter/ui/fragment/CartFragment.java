@@ -20,8 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CartBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.ICartModel;
@@ -77,6 +79,52 @@ public class CartFragment extends Fragment {
     private void setListener() {
         setPullDownListener();
         adapter.setListener(mOnCheckedChangeListener);
+        adapter.setUpdateListener(updateListener);
+//        adapter.setDelListener(delListener);
+    }
+
+//    View.OnClickListener delListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            int position = (int) v.getTag();
+//            L.e(TAG, "delListener,position=" + position);
+//            updateCart(position, -1);
+//        }
+//    };
+
+    View.OnClickListener updateListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = (int) v.getTag();
+            L.e(TAG, "updateListener,position=" + position);
+            updateCart(position, 1);
+        }
+    };
+
+    private void updateCart(final int position, final int count) {
+        CartBean bean = cartList.get(position);
+        if (bean != null) {
+            model.cartAction(getContext(), I.ACTION_CART_UPDATA, String.valueOf(bean.getId()),
+                    null, null, bean.getCount() + count, new OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            if (result != null && result.isSuccess()) {
+                                updateCartListener(position, count);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            L.e(TAG, "error=" + error);
+                        }
+                    });
+        }
+    }
+
+    private void updateCartListener(int position, int count) {
+        cartList.get(position).setCount(cartList.get(position).getCount() + count);
+        adapter.notifyDataSetChanged();
+        setPriceText();
     }
 
     CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new
