@@ -23,6 +23,7 @@ public interface I {
     int REQUEST_CODE_NICK = 103;
     int REQUEST_CODE_LOGIN_FROM_CART = 104;
     int REQUEST_CODE_COLLECT = 105;
+    int REQUEST_CODE_ORDER = 106;
 
     /** BeeColud APP ID */
     String BEE_COLUD_APP_ID = "3539b590-4859-4128-87a3-5fb8b86b94f6";
@@ -277,6 +278,8 @@ public interface I {
     String PAGE_SIZE = "page_size";//分页的每页数量
     int PAGE_ID_DEFAULT = 1;//分页的起始下标默认值
     int PAGE_SIZE_DEFAULT = 10;//分页的每页数量默认值
+
+    String ORDER_BUY_PRICE = "cn.ucai.fulicenter.order_buy_price";
 
     int ID_DEFAULT=0;//ID默认值
     int UN_READ_MSG_COUNT_DEFAULT=0;//未读消息数量默认值
