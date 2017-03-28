@@ -3,6 +3,7 @@ package cn.ucai.fulicenter.application;
 import android.app.Application;
 import android.content.Context;
 
+import cn.sharesdk.framework.ShareSDK;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.dao.UserDao;
 import cn.ucai.fulicenter.model.utils.L;
@@ -20,6 +21,7 @@ public class FuLiCenterApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        ShareSDK.initSDK(this);
     }
 
     public static Context getInstance() {
