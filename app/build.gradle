@@ -35,4 +35,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.google.code.gson:gson:2.8.0'
+    compile project(':lib:bdwallet_pay_sdk')
+    compile project(':lib:pingpp_one')
 }
