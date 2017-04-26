@@ -19,6 +19,7 @@ import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.ui.fragment.CartFragment;
+import cn.ucai.fulicenter.ui.fragment.CategoryEventBusFragment;
 import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 import cn.ucai.fulicenter.ui.fragment.PersonalCenterFragment;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     NewGoodsFragment newGoodsFragment;
     BoutiqueFragment boutiqueFragment;
     CategoryFragment categoryFragment;
+    CategoryEventBusFragment categoryEventBusFragment;
     PersonalCenterFragment personalCenterFragment;
     CartFragment cartFragment;
     RadioButton[] radioButtons;
@@ -62,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 .add(new NewGoodsFragment(), "newGoods")
                 .add(R.id.fragment_container, newGoodsFragment)
                 .add(R.id.fragment_container, boutiqueFragment)
-                .add(R.id.fragment_container, categoryFragment)
+                .add(R.id.fragment_container, categoryEventBusFragment)
                 .hide(boutiqueFragment)
-                .hide(categoryFragment)
+                .hide(categoryEventBusFragment)
                 .show(newGoodsFragment)
                 .commit();
     }
@@ -82,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
         fragments = new Fragment[5];
         newGoodsFragment = new NewGoodsFragment();
         boutiqueFragment = new BoutiqueFragment();
-        categoryFragment = new CategoryFragment();
+//        categoryFragment = new CategoryFragment();
+        categoryEventBusFragment = new CategoryEventBusFragment();
         cartFragment = new CartFragment();
         personalCenterFragment = new PersonalCenterFragment();
         fragments[0] = newGoodsFragment;
         fragments[1] = boutiqueFragment;
-        fragments[2] = categoryFragment;
+        fragments[2] = categoryEventBusFragment;
         fragments[3] = cartFragment;
         fragments[4] = personalCenterFragment;
     }
